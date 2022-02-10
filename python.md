@@ -207,14 +207,145 @@ sum(range(1, 11))    #sum()函数的start参数默认为0
 sum([1,2],3)	#相当于3+sum([1,2])
 ```
 
-zip函数
+zip函数：返回可迭代的zip对象
 
+```python
+>>> aList = [1, 2, 3]
+>>> bList = [4, 5, 6]
+>>> cList = zip(a, b)
+>>> cList
+<zip object at 0x0000000003728908>
+>>> list(cList)
+[(1, 4), (2, 5), (3, 6)]
+```
 
+可以看出zip函数可以将打包的对象变成元组的形式储存起来
 
-- 列表中的数据类型可以不同
-- 
-- 字符串
-- range、map、zip、enumerate等
+enumerate函数：可以返回对象+下标的元组形式
+
+```python
+for item in enumerate('abcdef'):
+    print(item)
+#(0, 'a')
+#(1, 'b')
+#(2, 'c')
+#(3, 'd')
+#(4, 'e')
+#(5, 'f')
+```
+
+列表推导式
+
+列表推导式可以使用非常简介的代码生成满足条件的列表，语法为
+
+```python
+[expression for expr1 in sequence1 if condition1
+            for expr2 in sequence2 if condition2
+            for expr3 in sequence3 if condition3
+            ...
+            for exprN in sequenceN if conditionN]
+#在一个中括号当中包含一个表达式+一个for还可以嵌套if语句
+#example1
+[x*y for x in range(1,5) if x > 2 for y in range(1,4) if y < 3]
+#相当于以下的语句
+for x in range(1,5):
+	if x > 2: 
+		for y in range(1,4): 
+			if y < 3: 
+				l.append(x*y)
+#[3*1,3*2,3*3,3*1...]
+#example2
+aList = [x*x for x in range(10)]
+[0, 1, 4, 9, 16, 25, 36, 49, 64, 81]
+#example3
+vec=[[1,2,3],[1,2,3]]
+[num for elem in vec for num in elem]
+#或者
+sum(vec,[])
+#example4
+aList = [-1,-4,6,7.5,-2.3,9,-11]
+[i for i in aList if i>0]
+[6, 7.5, 9]
+#example5
+>>> [(x, y) for x in range(3) for y in range(3)]
+[(0, 0), (0, 1), (0, 2), (1, 0), (1, 1), (1, 2), (2, 0), (2, 1), (2, 2)]
+>>> [(x, y) for x in [1, 2, 3] for y in [3, 1, 4] if x != y]
+[(1, 3), (1, 4), (2, 3), (2, 1), (2, 4), (3, 1), (3, 4)]
+#实现矩阵转置
+>>>matrix = [ [1, 2, 3, 4], [5, 6, 7, 8], [9, 10, 11, 12]] 
+>>> [[row[i] for row in matrix] for i in range(4)] 
+[[1, 5, 9], [2, 6, 10], [3, 7, 11], [4, 8, 12]]
+#for语句是从后向前看的，这样看起来比较容易
+#相当于
+for i in range(4):
+	for row in range matrix:
+    	l1.append(row[i])
+    l2.append(l1)
+#生成0-100所有素数
+[i for i in range(100) if 0 not int [for i%j in range(2,i)]]
+```
+
+## 元组
+
+不可变的列表
+
+- 可以被当作字典的键来使用
+
+元组的创建和删除
+
+```python
+t=('a','b')
+t1=('a',)#只包含一个元素，多加个，
+#或者
+t1='a',#也可以表示元组
+x=()
+t2=([1,2,3])#可以将列表转化为元组
+del t2#删除元组对象
+```
+
+序列解包
+
+```python
+x,y,z = 1,2,3 #多个变量同时赋值
+v_tuple = (False, 3.5, 'exp')
+(x, y, z) = v_tuple
+x, y, z = range(3)            #可以对range对象进行序列解包
+x, y, z = iter([1, 2, 3])     #使用迭代器对象进行序列解包
+x, y, z = map(str, range(3))  #使用可迭代的map对象进行序列解包
+a, b = b, a                   #交换两个变量的值
+x, y, z = sorted([1, 3, 2])   #sorted()函数返回排序后的列表
+a, b, c = 'ABC'               #字符串也支持序列解包
+x[:3] = map(str, range(5))    #切片也支持序列解包
+#example 对zip,enu进行解包
+for k,v in zip(key,val)
+for index,v in enumerate(s)
+```
+
+生成器推导式(括号+表达式)
+
+```python
+>>> g = ((i+2)**2 for i in range(10)) #创建生成器对象
+>>> g
+<generator object <genexpr> at 0x0000000003095200>
+>>> tuple(g)                          #转换为元组
+(4, 9, 16, 25, 36, 49, 64, 81, 100, 121)
+>>> list(g)
+[] 
+>>> g = ((i+2)**2 for i in range(10)) #重新创建生成器对象
+>>> g.__next__()                      #使用生成器对象的__next__()方法获取元素
+4
+>>> next(g)                           #使用函数next()获取生成器对象中的元素
+16
+#也可以直接遍历
+for i in ((i+2)**2 for i in range(10)):
+	print(i)
+```
+
+## 字典
+
+globals()：返回包含当前作用域内所有全局变量和值的字典
+
+locals()：返回包含当前作用域内所有局部变量和值的字典
 
 ## 关键字
 
