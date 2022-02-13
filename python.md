@@ -560,6 +560,517 @@ q.append(3)#向队列尾部添加元素，如果超出了maxlen那么就自动�
 q.appendleft(3)#向队列的头部添加元素，元素从从右侧溢出
 ```
 
+## 字符串
+
+nPython 3.x完全支持中文字符，默认使用UTF8编码格式，无论是一个数字、英文字母，还是一个汉字，在统计字符串长度时都按一个字符对待和处理
+
+字符串的创建
+
+```python
+s = "he"
+s = 'he'
+s = str(1/7)#将一个浮点转换成一个字符串类型
+```
+
+Python字符串驻留机制：对于**短字符串**，将其赋值给多个不同的对象时，内存中只有一个副本，多个对象共享该副本。长字符串不遵守驻留机制。  
+
+字符串格式化
+
+``"%?" % str``
+
+| **格式字符** | **说明**                                      |
+| ------------ | --------------------------------------------- |
+| %s           | 字符串  (采用str()的显示)                     |
+| %r           | 字符串  (采用repr()的显示)详细 见倒数第2页PPT |
+| %c           | 单个字符                                      |
+| %d           | 十进制整数                                    |
+| %i           | 十进制整数                                    |
+| %o           | 八进制整数                                    |
+| %x           | 十六进制整数                                  |
+| %e           | 指数  (基底写为e)                             |
+| %E           | 指数  (基底写为E)                             |
+| %f、%F       | 浮点数                                        |
+| %g           | 指数(e)或浮点数  (根据显示长度)               |
+| %G           | 指数(E)或浮点数  (根据显示长度)               |
+| %%           | 一个字符"%"                                   |
+
+```python
+>>> x = 1235
+>>> so = "%o" % x
+>>> so
+"2323"
+>>> sh = "%x" % x
+>>> sh
+"4d3"
+>>> se = "%e" % x
+>>> se
+"1.235000e+03"
+>>> int('555')
+555
+>>> '%s'%[1, 2, 3]        #直接把对象转换成字符串
+'[1, 2, 3]'
+>>> str((1,2,3))          #直接把对象转换成字符串
+'(1, 2, 3)'
+>>> str([1,2,3])
+'[1, 2, 3]'
+>>> list(str([1, 2, 3]))  #字符串中的每个字符都成为列表的元素（特别注意空格哦，英文规范）
+['[', '1', ',', ' ', '2', ',', ' ', '3', ']']
+```
+
+eval()
+
+```python
+eval() #该函数用来执行一个字符串表达式的值
+>>>x = 7 
+>>> eval('3 * x')
+21 
+>>> eval('pow(2,2)') 
+4 
+>>> eval('2 + 2') 4 
+>>> n=81 
+>>> eval("n + 4") 
+85
+```
+
+format()方法
+
+```python
+#{}是占位符
+>>>"{} {}".format("hello", "world") # 不设置指定位置，按默认顺序 
+'hello world’ 
+>>> "{0} {1}".format("hello", "world") # 设置指定位置 
+'hello world’ 
+>>> "{1} {0} {1}".format("hello", "world") # 设置指定位置 
+'world hello world’
+#数字格式调整
+{:.2f}#保留两位小数
+{:+.2f}#带符号暴力小数点后两位
+{:.0f}#不带小数
+{:0>2d}#左边补零 直到总位数为2
+{:0<2d}#右边补零 直到总位数为4
+{:,}#以，的形式划分数字 如 1,000,000
+{:.2%}#化成百分数，小数点后保留两位
+{:>10d}#右对齐
+{:<10d}#左对齐
+{:^10d}#居中
+{:b}#2
+{:d}#10
+{:o}#8
+{:x}#16进制
+{:#x}0x16进制，字母小写
+{:#X}0X 16进制，字母大写
+ 
+#example
+>>> print("The number {0:,} in hex is: {0:#x}, the number {1} in oct is {1:#o}".format(5555,55))
+The number 5,555 in hex is: 0x15b3, the number 55 in oct is 0o67
+>>> print("The number {1:,} in hex is: {1:#x}, the number {0} in oct is {0:o}".format(5555,55))
+The number 55 in hex is: 0x37, the number 5555 in oct is 12663
+>>> position = (5, 8, 13)
+>>> print("X:{0[0]};Y:{0[1]};Z:{0[2]}".format(position))
+X:5;Y:8;Z:13
+>>> '{0:<8d},{0:^8d},{0:>8d}'.format(65) #设置对齐方式
+'65      ,   65   ,      65'
+ 
+ #example2
+weather = [("Monday","rainy"),("Tuesday","sunny"),
+           ("Wednesday", "sunny"),("Thursday","rainy"),
+           ("Friday","cloudy")]
+formatter = "Weather of '{0[0]}' is '{0[1]}'".format
+for item in map(formatter,weather):
+    print(item)
+```
+
+Formatted String Literals
+
+```python
+#用法如下
+name = 'xiao'
+f'{name} is smell '
+```
+
+字符串常用操作方法
+
+| **操作**                                                     | **含义**                                                     |
+| ------------------------------------------------------------ | ------------------------------------------------------------ |
+| **+**                                                        | **连接**                                                     |
+| *****                                                        | **重复**                                                     |
+| <string>[  ]，index(), rindex()                              | **索引**                                                     |
+| <string>[  : ]                                               | **剪切**                                                     |
+| len(<string>)                                                | **长度**                                                     |
+| **upper(),  lower()**                                        | 字符串中字母大/小写                                          |
+| **capitalize()、title()、swapcase()**                        | **首字母大写，每个单词首字母大写，大小写交换**               |
+| **strip()**                                                  | **去两边空格及去指定字符**                                   |
+| **split(),**  **rsplit****(),** **lstrip****()**             | **按指定字符分割字符串为数组**                               |
+| **join()**                                                   | **连接两个字符串序列**                                       |
+| **find(),**  **rfind****()**                                 | **搜索指定字符串**                                           |
+| **replace()**                                                | **字符串替换**                                               |
+| for  <var> in <string>                                       | **字符串迭代**                                               |
+| startswith()endswith()center()、ljust()、rjust()zfill() isalnum() 等 | **字符串是否以指定字符串开始或结束**  **居中、左对齐或右对齐**  **返回指定宽度的字符串，在左侧以字符0进行填充**  **字符串是否为数字、字母** |
+
+```python
+```
+
+## 函数
+
+- 函数形参不需要声明类型，也不需要指定函数返回值类型
+
+- 即使该函数不需要接收任何参数，也必须保留一对空的圆括号
+- 括号后面的冒号必不可少
+- 函数体相对于def关键字必须保持一定的空格缩进
+- Python允许嵌套定义函数
+- 函数调用时向其传递实参，将**实参引用**传递给形参。
+- 对于绝大多数情况下，在函数内部直接修改形参的值**不会影响实参**，而是**创建一个新变量**。
+
+```python
+def func_name():
+    '''注释'''
+    #<函数体>
+    #return <返回值列表>
+```
+
+函数的对象特性
+
+```python
+>>> def func():
+    print(func.x) 
+>>> func() 
+AttributeError: 'function' object has no attribute 'x'
+>>> func.x = 3                    #动态为函数增加新成员
+>>> func()
+3
+>>> func.x                        #在外部也可以直接访问函数的成员
+3
+>>> del func.x                    #删除函数成员
+>>> func()
+AttributeError: 'function' object has no attribute 'x'
+#可以函数是函数对象，有成员对象
+```
+
+函数传递实参引用，在函数内部改变形参，新建一个变量
+
+```python
+>>> def addOne(a):
+    print(id(a), ':', a)
+    a += 1
+    print(id(a), ':', a)
+	
+>>> v = 3
+>>> id(v)
+1599055008
+>>> addOne(v)
+1599055008 : 3
+1599055040 : 4 #得到修改的时候新建变量，因此id发生了变化
+>>> v
+3
+>>> id(v)
+1599055008
+#注意！如果传递给函数的实参是可变序列，并且在函数内部使用“下标”或“可变序列自身的方法增加、删除元素或修改元素时”，实参也得到相应的修改。
+>>> def modify(d):         
+    d['age'] = 38
+>>> a = {'name':‘zhang', 'age':46, 'sex':'Male'}
+>>> a
+{'age': 46, 'name': ‘zhang', 'sex': 'Male'}
+>>> modify(a)
+>>> a
+{'age': 38, 'name': ‘zhang', 'sex': 'Male'}
+```
+
+函数的参数类型
+
+- 参数允许默认值（注意：默认值参数必须出现在函数参数列表的最右端，任何一个默认值参数右边不能有非默认值参数。）
+- 参数可以指定类型
+
+```python
+def demo(newitem,old_list=[]):
+    old_list.append(newitem)
+    return old_list
+
+print(demo('5',[1,2,3,4]))
+print(demo('aaa',['a','b']))
+print(demo('a'))#当使用默认参数的时候，他一直是可改变的，会改变多次哦
+print(demo('b'))
+#解决方案
+def demo(newitem,old_list=None):
+    if old_list is None:
+        old_list=[]
+    new_list = old_list[:] #直接返回新建的，而不在原来的基础上改变
+    new_list.append(newitem)
+    return new_list
+
+print(demo('5',[1,2,3,4]))
+print(demo('aaa',['a','b']))
+print(demo('a'))
+print(demo('b'))
+```
+
+关键参数，防止用户忘记参数的顺序时出现麻烦
+
+```python
+#在调用时指定参数名就可以将实参传给指定给定形参
+>>> def demo(a,b,c=5):
+    print(a,b,c)
+
+>>> demo(3,7)
+3 7 5
+>>> demo(a=7,b=3,c=6)
+7 3 6
+>>> demo(c=8,a=9,b=0)#
+9 0 8
+```
+
+可变长度参数
+
+n可变长度参数主要有两种形式：在参数名前加1个*或2个**
+
+- *parameter用来接收多个位置实参并将其**放在一个元组**中
+
+- \**parameter接收多个**关键参数**并存放到**字典**中
+
+```python
+#传任意参数
+>>> def demo(*p):
+    print(p)
+>>> demo(1,2,3)
+(1, 2, 3)
+>>> demo(1,2)
+(1, 2)
+>>> demo(1,2,3,4,5,6,7)
+(1, 2, 3, 4, 5, 6, 7)
+#传关键参数给**
+>>> def demo(**p): #p是一个字典
+    for item in p.items():
+        print(item)
+>>> demo(x=1,y=2,z=3)
+('y', 2)
+('x', 1)
+('z', 3)
+```
+
+参数传递的序列解包
+
+```python
+#序列加*就是解包
+#** 关键参数解包
+#* 序列解包
+>>> def demo(a, b, c):
+    print(a+b+c)
+>>> seq = [1, 2, 3]
+>>> demo(*seq)
+6
+>>> tup = (1, 2, 3)
+>>> demo(*tup)
+6
+>>> dic = {1:'a', 2:'b', 3:'c'}
+>>> demo(*dic)#默认是key值的传递
+6
+>>> Set = {1, 2, 3}
+>>> demo(*Set)
+6
+>>> demo(*dic.values())#这样是val值的传递
+abc
+>>> def demo(a, b, c):
+    print(a, b, c)	
+
+>>> demo(*(1, 2, 3))                  #调用，序列解包
+1 2 3
+>>> demo(1, *(2, 3))                  #位置参数和序列解包同时使用
+1 2 3
+>>> demo(1, *(2,), 3)#创建元组要，
+1 2 3
+#序列解包相当于位置参数，优先处理
+>>> demo(a=1, *(2, 3)) 
+#相当于demo(a=1,a=2,b=3)所以会报错
+#序列解包会在关键参数解包之前进行解包，序列解包不能放在关键参数解包之后
+>>> def demo(a, b, c):
+    print(a, b, c)
+>>> demo(**{'a':1, 'b':2}, *(3,)) #**不能放在*之前
+#SyntaxError: iterable argument unpacking follows keyword argument unpacking
+
+>>> demo(*(3,), **{'a':1, 'b':2}) #这个是重复的参数
+#Traceback (most recent call last):
+ # File "<pyshell#30>", line 1, in <module>
+   # demo(*(3,), **{'a':1, 'b':2})
+#TypeError: demo() got multiple values for argument 'a'
+>>> demo(*(3,), **{'c':1, 'b':2})
+3 2 1
+```
+
+变量和作用域
+
+- 一个变量已在函数外定义，如果在函数内需要为这个变量赋值，并要将这个赋值结果反映到函数外，可以在**函数内使用global将其声明为全局变量**。
+- 如果一个变量在函数外没有定义，在函数内部也可以直接将一个变量定义为全局变量，该函数执行后，将增加一个新的全局变量。
+
+```python
+global x = 3 #定义一个全局变量
+#example
+>>> def demo(): #函数定义
+    global x
+    x = 3 #将x转变为全局变量（如果x之前被定义过）
+    y = 4
+    print(x,y)
+>>> x = 5
+>>> demo()
+3  4
+>>> x
+3
+```
+
+- 如果在局部使用了赋值操作（**任意位置**），并且没有显式的使用global进行定义，那么该变量就是局部变量，和使用的先后顺序无关！
+
+  ```python
+  >>> x = 3
+  >>> def f():
+      print(x) #按理来说是先输出全局变量的值，但是后面使用了x = 5 ，所以x是局部变量此时x还没有定义，因此报错
+      x = 5
+      print(x)
+  
+  >>> f()
+  #Traceback (most recent call last):
+  #  File "<pyshell#10>", line 1, in <module>
+  #    f()
+  #  File "<pyshell#9>", line 2, in f
+  #    print(x)
+  #UnboundLocalError: local variable 'x' referenced before assignment
+  
+  ```
+
+- 如果出现局部变量和全局变量重名的情况，局部变量不会影响全局变量的值、
+
+  ```python
+  >>> def demo():
+      x = 3         	#这里的x和外边的x=5的x不是一个x
+  >>> x = 5
+  >>> x
+  5
+  >>> demo()
+  >>> x             
+  5
+  ```
+
+- nonlocal关键字定义一种介于二者之间的变量。关键字nonlocal声明的变量会引用距离最近的非全局作用域的变量，要求声明的变量已经存在，关键字nonlocal不会创建新变量。
+
+  ```python
+  def scope_test():
+      def do_local():
+          spam = "我是局部变量"
+  
+      def do_nonlocal():
+          nonlocal spam           #这时要求spam必须是已存在的变量
+          spam = "我不是局部变量，也不是全局变量"
+  
+      def do_global():
+          global spam             #如果全局作用域内没有spam，就自动新建一个
+          spam = "我是全局变量"
+          
+      spam = "原来的值"
+      do_local()
+      print("局部变量赋值后：", spam)
+      do_nonlocal()
+      print("nonlocal变量赋值后：", spam) #可以看出spam是在local和nonlocal之间定义的量
+      do_global()
+      print("全局变量赋值后：", spam) #这里对全局变量进行赋值不会影响到里面的spam，也就是说全局变量的spam和前两个函数操作的spam不是一个spam
+  scope_test()
+  print("全局变量：", spam)
+  ```
+
+lambda
+
+```python
+<函数名>=lambda<参数列表>:<表达式>
+#example1
+>>> f = lambda x, y, z: x+y+z        #可以给lambda表达式起名字
+>>> f(1,2,3)                         #像函数一样调用
+6
+>>> g = lambda x, y=2, z=3: x+y+z    #参数默认值
+>>> g(1)
+6
+>>> g(2, z=4, y=5)                   #关键参数
+11
+#example2
+>>> L = [(lambda x: x**2),
+         (lambda x: x**3),
+         (lambda x: x**4)] #用()括起来
+>>> print(L[0](2),L[1](2),L[2](2))#调用的时候返回的仅仅是函数名，还要加上参数列表
+4 8 16
+>>> D = {'f1':(lambda:2+3),
+         'f2':(lambda:2*3),         
+         'f3':(lambda:2**3)}
+>>> print(D['f1'](), D['f2'](), D['f3']())
+5 6 8
+>>> L = [1,2,3,4,5]
+>>> print(list(map(lambda x: x+10, L))) 
+[11, 12, 13, 14, 15]
+>>> L
+[1, 2, 3, 4, 5]
+```
+
+
+
+map函数：将一个函数的操作作用到一个序列上
+
+```python
+#语法：map(func_name,lis)
+
+>>> def add5(v):
+    return v+5
+
+>>> list(map(add5,range(10))) #第一个参数是函数名，第二个参数是list
+[5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
+
+#同样可以作用于多个参数的函数
+>>> def add(x, y):return x+y
+>>> list(map(add, range(5), range(5)))
+[0, 2, 4, 6, 8]
+```
+
+filter函数：返回符合函数条件的序列
+
+```python
+>>> seq=['foo','x41','?!','***']
+>>> def func(x):
+    return x.isalnum()
+>>> list(filter(func,seq))
+['foo', 'x41']
+
+>>> list(filter(lambda x:x.isalnum(),seq))
+['foo', 'x41']
+```
+
+reduce函数：n标准库functools中的reduce()函数可以将一个接受2个参数的函数以迭代的方式从左到右依次作用到一个序列或迭代器对象的所有元素上。
+
+```python
+>>> from functools import reduce
+>>> seq=[1,2,3,4,5,6,7,8,9]
+>>> reduce(lambda x,y:x+y, seq) #先对前两个进行运算，生成的结果再和第三个进行运算，以此类推
+45
+>>> def add(x, y):
+    return x + y
+>>> reduce(add,range(10))
+45
+>>> reduce(add,map(str,range(10)))
+'0123456789'
+```
+
+yield函数：生成器对象，执行到yield程序挂起，直到执行到next()函数恢复执行
+
+```python
+>>> def f():
+    a, b = 1, 1            #序列解包，同时为多个元素赋值
+    while True:
+        yield a            #暂停执行，需要时再产生一个新元素
+        a, b = b, a+b      #序列解包，继续生成新元素
+
+>>> a = f()                #创建生成器对象
+>>> for i in range(10):    #斐波那契数列中前10个元素
+    print(a.__next__(), end=' ')
+
+1 1 2 3 5 8 13 21 34 55 
+```
+
+## 面向对象
+
+## 文件操作
+
 ## 关键字
 
 - 关键字：as
@@ -568,24 +1079,6 @@ q.appendleft(3)#向队列的头部添加元素，元素从从右侧溢出
 - 关键字 assert
   - 条件不满足程序运行的情况下直接返回错误，而不必等待程序运行后出现崩溃的情况。
   
-- **zip()** 
-
-  用于将可迭代的对象作为参数，将对象中对应的元素打包成一个个元组，然后返回由这些元组组成的列表。
-
-  如果各个迭代器的元素个数不一致，则返回列表长度与最短的对象相同，利用 * 号操作符，可以将元组解压为列表。
-
-  ```python
-  >>>a = [1,2,3]
-  >>> b = [4,5,6]
-  >>> c = [4,5,6,7,8]
-  >>> zipped = zip(a,b)     # 打包为元组的列表
-  [(1, 4), (2, 5), (3, 6)]
-  >>> zip(a,c)              # 元素个数与最短的列表一致
-  [(1, 4), (2, 5), (3, 6)]
-  >>> zip(*zipped)          # 与 zip 相反，*zipped 可理解为解压，返回二维矩阵式
-  [(1, 2, 3), (4, 5, 6)]
-  ```
-
 - *的用法
 
   - 用作乘法
