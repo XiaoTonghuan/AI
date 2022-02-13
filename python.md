@@ -347,6 +347,219 @@ globals()：返回包含当前作用域内所有全局变量和值的字典
 
 locals()：返回包含当前作用域内所有局部变量和值的字典
 
+字典类型的操作
+
+字典的创建和删除
+
+```python
+#使用{}
+a_dic = {'server': 'dada'}
+x = {}
+#使用dict函数将元组转化为字典
+>>> keys = ['a', 'b', 'c', 'd']
+>>> values = [1, 2, 3, 4]
+>>> dictionary = dict(zip(keys, values))
+>>> dictionary
+{'a': 1, 'c': 3, 'b': 2, 'd': 4}
+>>> x = dict()                          #空字典
+>>> x
+{}
+#使用键值对定义字典
+d = dict{d='a',p='q'}
+#{d:'a',p:'q'}
+#创造值为空的键
+adict=dict.fromkeys(['name','sex','age'])
+#example
+>>> a = dict(one=1, two=2, three=3)#直接转化为字符串
+>>> b = {'one': 1, 'two': 2, 'three': 3} 
+>>> c = dict(zip(['one', 'two', 'three'], [1, 2, 3])) 
+>>> d = dict([('two', 2), ('one', 1), ('three', 3)]) 
+>>> e = dict({'three': 3, 'one': 1, 'two': 2}) 
+>>> f = dict({'one': 1, 'three': 3}, two=2) 
+>>> a == b == c == d == e == f 
+True
+del dic #删除整个字典
+```
+
+字典元素的读取
+
+```python
+#使用键作为下标可以访问值，如果值不存在则抛出异常
+adic = {'name':'dong','sex':'male',age:'18'}
+adic['name'] #dong
+>>> aDict['tel']                     #键不存在，抛出异常
+#Traceback (most recent call last):
+#  File "<pyshell#53>", line 1, in <module>
+#    aDict['tel']
+#KeyError: 'tel'
+
+#使用get函数可以访问到没有值的键值对
+>>> print(aDict.get('address'))
+#None
+#可以用=的方式添加值
+aDict['address']='Not Addressed'
+#get函数可以用来给键添加值
+>>> print(aDict.get('address', 'SDIBT'))
+#SDIBT
+aDict['score'] = aDict.get('score',[])#
+
+#使用items函数，可以读取所有的键值对
+>>> aDict={'name':'Dong', 'sex':'male', 'age':37}
+>>> for item in aDict.items():     #输出字典中所有元素
+    print(item)
+#('age', 37)
+#('name', 'Dong')
+#('sex', 'male')
+
+#不加特殊说明默认输出的是键
+for i in dic:
+	print(i)
+#可以使用解包的方式
+for i,j in dic:
+    print(i,j)
+    
+#items()函数返回所有简直对的列表，每一个键值对组成一个元组
+>>>aDcit.items()
+dict_items([('name', 'Dong'), ('sex', 'male'), ('age', 37)])  #返回所有键：值
+>>> aDict.keys()                           #返回所有键
+dict_keys(['name', 'sex', 'age'])
+>>> aDict.values()                         #返回所有值
+dict_values(['Dong', 'male', 37])
+```
+
+字典元素的修改
+
+```python
+#= 若存在键值对修改值，不存在直接创建一个键值对
+>>> aDict['age'] = 37                 #修改元素值
+>>> aDict
+{'age': 37, 'name': 'Li', 'sex': 'female'}
+>>> aDict['address'] = 'hefei'        #增加新元素
+>>> aDict
+{'age': 37, 'address': 'hefei', 'name': 'Li', 'sex': 'female'}
+#使用update的方式将另一个字典的所有键值对添加到这个字典
+aDict.update({'a':1,'b':2})
+
+#使用del函数删除指定键的元素，clear用来删除字典中的所有元素，pop删除并返回指定键的元素，opitem()删除并返回字典中最后一个元素
+del dic #删除整个字典
+dic.clear() #删除字典中所有的键值对
+del dic['a']#
+dic.pop('b')#返回键为'b'的值，并弹出
+dic.popitem()#删除并返回字典的最后一对儿键和值
+```
+
+字典推导式
+
+```python
+#快速交换字典键值
+dict2={k,v for v,k in dict1}
+#字典推导式和元组推导式列表推导式并没有什么很大的差别
+```
+
+## 集合
+
+- 集合是无序可变的序列，使用一对大括号界定，元素不可重复，同一个集合中每个元素都是唯一的
+- 集合中只能包含数字、字符串、元组等可哈希的类型
+
+创建和删除
+
+```python
+a={3,5}#集合和字典一样，用{}界定
+a.add(7)#使用add而不是append向集合中添加元素
+#使用set函数可以将其他类型转换成集合
+a_set = set(range(8,14))
+b_set = set([1,2,3,3,5])#集合可以自动去除重复的元素
+#创建空集合
+s = set()
+s = {,}#空集合不能使用{}直接初始化，{}初始化的是字典
+
+#删除
+del a #删除整个集合
+a.pop()#弹出并删除其中的一个元素
+a.remove()#删除指定的元素
+a.clear()#清空整个集合
+```
+
+常用函数
+
+```python
+s.copy()#返回集合的一个拷贝
+s.clear()#移除S中所有的数据项
+s.pop()# 随机 弹出一个元素
+x in S #如果x是S中的元素，返回True 否则返回 False
+x not in S #和上面的类似
+s.remove('a')#删除集合中的指定元素，不在集合中报错
+s.discard(x)#删除集合中的指定元素，不在集合中不报错
+s.isdisjoint(T)#两个集合不相交返回true
+len(s)#返回集合中元素的数量
+s.difference(T)#返回在集合S但是不在集合T中的元素
+S-=T#两个集合作差
+s&=T#求交集
+s=^T#求对称差（环和）异或
+s=|T#求并集
+s<=T#s是T的子集返回true
+s>=T#t是s的子集返回true
+```
+
+集合推导式
+
+```python
+s = {x.strip() for x in (' he ',' she ','i')} #strip函数可以去掉空格
+```
+
+## python中的数据结构
+
+堆
+
+```python
+import heapq #堆
+heap=[]#先建立一个列表
+for i in data:#通过heappush将元素放进去
+	heapq.heappush(heap,i)
+heapq.heappop(heap)#弹出堆顶的元素
+#将列表堆化
+h = [1,2,3,4,5,6,7,8]
+heapq.heapify(h)
+heapq.heapreplace(h,6)#弹出最小的元素，并向堆中插入一个新的元素6
+heapq.nlargest(3,h)#返回堆中前3个最大的元素
+heapq.nsmallest(3,h)#返回堆中前三个最小的元素
+```
+
+队列
+
+```python
+import queue #队列
+q = queue.Queue() #初始化一个队列
+#入队
+q.put(0)
+q.put(1)
+q.queue
+#[0,1]
+q.get()#返回队首元素，并出队
+```
+
+优先队列
+
+```python
+from queue import PriorityQueue #导入优先级队列
+q = PriorityQueue() #创建优先级队列对象
+#插入元素
+q.put(3)
+q.put(8)
+#返回并删除队列中优先级最低的元素
+q.get()
+```
+
+双端队列
+
+```python
+#collections 提供了双端队列
+form collections import deque
+q = deque(maxlen=5) #创建双端队列
+q.append(3)#向队列尾部添加元素，如果超出了maxlen那么就自动溢出掉左侧的元素
+q.appendleft(3)#向队列的头部添加元素，元素从从右侧溢出
+```
+
 ## 关键字
 
 - 关键字：as
