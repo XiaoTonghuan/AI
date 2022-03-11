@@ -1,0 +1,1 @@
+torch.nn.functional 对几个输入平面组成的输入信号应用1D卷积

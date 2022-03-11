@@ -707,8 +707,168 @@ f'{name} is smell '
 | for  <var> in <string>                                       | **字符串迭代**                                               |
 | startswith()endswith()center()、ljust()、rjust()zfill() isalnum() 等 | **字符串是否以指定字符串开始或结束**  **居中、左对齐或右对齐**  **返回指定宽度的字符串，在左侧以字符0进行填充**  **字符串是否为数字、字母** |
 
+常用的方法
+
+索引
+
 ```python
+find() # 查找一个字串首次出现的位置
+rfind() #查找一个字串最后一次出现的位置 不存在返回-1
+
+index() #
+rindex() # 功能相似，不存在抛出异常
+>>> s="apple,peach,banana,peach,pear"
+>>> s.find("peach")
+6
+>>> s.find("peach",7)
+19
+>>> s.find("peach",7,20)
+-1
+>>> s.rfind('p')
+25
+>>> s.index('p')
+1
+>>> s.index('pe')
+6
+>>> s.index('pear')
+25
+>>> s.index('ppp')
+Traceback (most recent call last):
+  File "<pyshell#11>", line 1, in <module>
+    s.index('ppp')
+ValueError: substring not found
+>>> s.count('p')
+5
+>>> s.count('pp')
+1
+>>> s.count('ppp')
+0
 ```
+
+拆分
+
+- split()和rsplit()方法如果不指定分隔符，则字符串中的任何空白符号（包括空格、换行符、制表符等）都被认为是分隔符，返回包含最终分隔符的列表
+
+  split()和rsplit()方法还允许指定最大分割次数。
+
+```python
+split() #从左向右划分
+rsplit() #从右向左划分
+partition() #将字符串分为3部分
+rpartition() #类似
+>>> s = "apple,peach,banana,pear"
+>>> s.split(",")
+["apple", "peach", "banana", "pear"]
+>>> s.partition(',')
+('apple', ',', 'peach,banana,pear')
+>>> s.rpartition(',')
+('apple,peach,banana', ',', 'pear')
+>>> s.rpartition('banana')
+('apple,peach,', 'banana', ',pear')
+>>> s = "2020-5-20"
+>>> t = s.split("-")
+>>> print(t)
+['2020', ‘5', ‘20']
+>>> print(list(map(int, t)))
+[2020, 5, 20]
+```
+
+```python
+>>> s = '\n\nhello\t\t world \n\n\n My name is Python   '
+>>> s.split(None, 1) #指定最大分割数为1
+['hello', 'world \n\n\n My name is Python   ']#首或尾不算做分割
+>>> s.rsplit(None, 1)
+['\n\nhello\t\t world \n\n\n My name is', 'Python']
+>>> s.split(None, 2)
+['hello', 'world', 'My name is Python   ']
+>>> s.rsplit(None, 2)
+['\n\nhello\t\t world \n\n\n My name', 'is', 'Python']
+>>> s.split(maxsplit=6)
+['hello', 'world', 'My', 'name', 'is', 'Python']
+>>> s.split(maxsplit=100)   #最大分隔次数大于可分隔次数时无效
+['hello', 'world', 'My', 'name', 'is', 'Python']
+#example
+>>> 'a,,,bb,,ccc'.split(',')
+['a', '', '', 'bb', '', 'ccc']     #每个逗号都被作为独立的分隔符，两个逗号之间被认为是空白
+>>> 'a\t\t\tbb\t\tccc'.split()     #连续多个制表符被作为一个分隔符,这是不指定分隔符的情况
+['a', 'bb', 'ccc']
+```
+
+字符串连接join()
+
+```python
+join()#将列表中的每一个字符串通过当前字符串连接
+>>> li = ["apple", "peach", "banana", "pear"]
+>>> ','.join(li)
+'apple,peach,banana,pear'
+>>> '::'.join(li) #当前字符串作为连接符
+'apple::peach::banana::pear'
+```
+
+字母转换
+
+```python
+>>> s = "What is Your Name?"
+>>> s.lower()                   #返回小写字符串
+'what is your name?'
+>>> s.upper()                   #返回大写字符串
+'WHAT IS YOUR NAME?'
+>>> s.capitalize()              #字符串首字符大写
+'What is your name?'
+>>> s.title()                   #每个单词的首字母大写
+'What Is Your Name?'
+>>> s.swapcase()                #大小写互换
+'wHAT IS yOUR nAME?'
+>>> s = "中国，中国"
+>>> print(s)
+#中国，中国
+>>> s2 = s.replace("中国", "中华人民共和国")  #两个参数都作为一个整体
+>>> print(s2)
+#中华人民共和国，中华人民共和国
+```
+
+字母转换2
+
+```python
+maketrans() #生成一个字典，产生两个字符串之间的映射关系 
+translate() #将原来的字符作为key，替换为对应的val
+>>> table = ''.maketrans('abcdef123', 'uvwxyz@#$’ )
+#注意这个设计，通过一个空字符串来调用                         
+>>> talbe
+{97: 117, 98: 118, 99: 119, 100: 120, 101: 121, 102: 122, 49: 64, 50: 35, 51: 36}
+>>> s = "Python is a greate programming language. I like it!"
+#按映射表进行替换
+>>> s.translate(table)
+```
+
+字符串格式化
+
+```python
+strip()、rstrip()、lstrip()
+>>> '\n\nhello world   \n\n'.strip()      #删除空白字符，从l
+'hello world'
+>>> "aaaassddf".strip("a")                #删除指定字符
+'ssddf'
+>>> "aaaassddfaaa".rstrip("a")            #删除字符串右端指定字符
+'aaaassddf'
+>>> "aaaassddfaaa".lstrip("a")            #删除字符串左端指定字符
+'ssddfaaa'
+#注意，参数不是作为一个整体进行处理的
+>>> 'aabbccddeeeffg'.strip('af')  #字母f不在字符串两侧，所以不删除
+'bbccddeeeffg'
+>>> 'aabbccddeeeffg'.strip('gaf')
+'bbccddeee'
+>>> 'aabbccddeeeffg'.strip('gaef')
+'bbccdd'
+>>> 'aabbccddeeeffg'.strip('gbaef')
+'ccdd'
+>>> 'aabbccddeeeffg'.strip('gbaefcd')
+''
+```
+
+
+
+
 
 ## 函数
 
@@ -1004,8 +1164,6 @@ lambda
 [1, 2, 3, 4, 5]
 ```
 
-
-
 map函数：将一个函数的操作作用到一个序列上
 
 ```python
@@ -1112,100 +1270,6 @@ yield函数：生成器对象，执行到yield程序挂起，直到执行到next
       dic={'a':1,'b':2,'c':}
       str='{a},{b},{c}'.format(**dic)
       ```
-    
-- 
-
-# numpy
-
-## array
-
-这个库是科学计算基础库
-
-创建数组，可以将一个列表作类型传入，得到一个array
-
-```python
-a = np.array([1,2,3,4])
-print(a)
-print(type(a)) #type可以返回类型,ndarray
-
-#二维数组
-b = np.array([[1,2],[1,2]]) #
-#有多个参数
-np.array([1,2,3],dtype=float,ndmin=3) #数据类型和维数
-```
-
-可以通过arange的方式创建array
-
-```python
-a=list(range(1,9,2)) #[),step,默认步长是1
-a=np.arange(1,11,2)#返回一个array类型
-np.arange(1,22,2,dtype=float)
-```
-
-其他的创建数组的方式
-
-```python
-#zeros
-np.zeros(shape,dtype=float,order='C')#创建全是0的数组,第三个参数是type
-#如
-np.zero(5)
-np.zero((2,3))
-
-#ones
-a=np.ones(1)#数据初始化为1
-np.empty(1)#数据初始化为任意
-```
-
-
-
-array的对象属性
-
-<img src=".assets/image-20220202104029564.png" alt="image-20220202104029564" style="zoom:80%;" />
-
-## 切片和索引
-
-一维数组中切片和索引的使用
-
-```python
-a=np.arange(1,9,2)#先创建一个数组
-#索引
-y = a[-1] #倒数第一个
-y = a[-3] #倒数第三个
-#切片
-y = a[:]#从开始到结尾
-y = a[1:3]#从索引1到3同样是左闭右开
-y = a[1:6:2]#步长为2
-y = a[::-1]#从开始到结尾，步长为-1，即反向输出
-y = a[-5:-2]#从-5到-2
-```
-
-二维数组中切片和索引的使用
-
-```python
-#索引
-a = np.array([[1,2],[1,3,2]])
-a[2] #获取第三行
-a[2][1] #获取第3行的第2个元素
-#切片
-[对行进行切片,对列进行切片]
-a[:,:]#获取所有行所有列
-a[:,2]#获取所有行第3列p
-a[:,0:2]#获取所有行第1，2列
-a[1::2,::2]#获取偶数行奇数列
-#使用坐标获取元素
-a[1,2] #获取第2行第3列的元素a[1][2]相同
-a[(1,2),(3,4)] #获取多个元素第2行第4个和第3行第5个
-a[::-1]#行倒叙
-a[::-1,::-1]#列倒叙
-```
-
-三个点
-
-```python
-a[:,:,None] 和a[…, None] 等价
-```
-
-省略前面两维的数据
 
 # cv,torch
 
